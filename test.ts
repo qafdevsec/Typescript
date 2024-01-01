@@ -1,17 +1,31 @@
 import * as fs from 'fs';
 
-function insecureStoreSensitiveInformation(data: string, filename: string): void {
+function saveUserInputToFile(userInput: string, filename: string): void {
   try {
-    // WARNING: This code stores sensitive information in clear text!
-    fs.writeFileSync(filename, data, 'utf-8');
-    console.log('Sensitive information stored in plain text.');
+    // WARNING: This code saves user input to a file without proper validation!
+    fs.writeFileSync(filename, userInput, 'utf-8');
+    console.log('User input saved to file.');
   } catch (error) {
-    console.error('Error storing sensitive information:', error.message);
+    console.error('Error saving user input to file:', error.message);
+  }
+}
+
+function executeSavedCodeFromFile(filename: string): void {
+  try {
+    // WARNING: This code executes the content of the file without proper validation!
+    const fileContent = fs.readFileSync(filename, 'utf-8');
+    eval(fileContent); // Execute the content of the file (unsafe)
+  } catch (error) {
+    console.error('Error executing saved code from file:', error.message);
   }
 }
 
 // Example usage
-const sensitiveData = 'my_secret_password';
-const fileName = 'insecure_sensitive_data.txt';
+const maliciousCode = 'alert("This is a malicious script!")';
+const fileName = 'user_input.js';
 
-insecureStoreSensitiveInformation(sensitiveData, fileName);
+// Save user input to a file
+saveUserInputToFile(maliciousCode, fileName);
+
+// Execute the saved code from the file
+executeSavedCodeFromFile(fileName);
