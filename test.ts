@@ -1,16 +1,22 @@
-import * as express from 'express';
+import * as https from 'https';
+import * as fs from 'fs';
 
-const app = express();
+const options = {
+  key: fs.readFileSync('insecure-key.pem'),  // WARNING: This key should be kept secret!
+  cert: fs.readFileSync('insecure-cert.pem'), // WARNING: This certificate is self-signed and not trusted!
+  ciphers: 'LOW', // WARNING: Allowing low-strength ciphers is insecure!
+  honorCipherOrder: false, // WARNING: Disabling cipher order may expose the connection to downgrade attacks!
+  secureProtocol: 'TLSv1_method', // WARNING: Using outdated and insecure TLS version!
+  // Other insecure configurations might include weak key exchange algorithms, lack of Perfect Forward Secrecy (PFS), etc.
+};
 
-// Middleware to set X-Frame-Options header
-app.use((req, res, next) => {
-  res.header('X-Frame-Options', 'DENY');
-  next();
+const server = https.createServer(options, (req, res) => {
+  res.writeHead(200);
+  res.end('Insecure TLS Configuration Example\n');
 });
 
-// Your routes and application logic go here
+const port = 8443;
 
-const port = 3000;
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
