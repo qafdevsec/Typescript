@@ -1,15 +1,11 @@
-import * as crypto from 'crypto';
+async function updateUser(userId, requestBody) {
+  const userData = await db.loadUserData(userId);
+  merge(userData, requestBody);
 
-function insecureHashPassword(password: string): string {
-  // WARNING: MD5 is considered insecure for password hashing
-  const hash = crypto.createHash('md5');
-  hash.update(password);
-  return hash.digest('hex');
+  log("Saving userData " + userData.toString());
+  await db.saveUserData(userId, userData);
+  return userData;
 }
 
-// Example usage
-const plaintextPassword = 'mySecurePassword';
-const insecureHashedPassword = insecureHashPassword(plaintextPassword);
-
-console.log('Original Password:', plaintextPassword);
-console.log('Insecure Hashed Password:', insecureHashedPassword);
+async function getRole(userId) {
+  const userPermissions = await db.loadUserPermissions(userId);
