@@ -1,10 +1,15 @@
-function insecurePassword(): string {
-  // BAD: the random suffix is not cryptographically secure
-  const suffix: number = Math.random();
-  const password: string = "myPassword" + suffix;
-  return password;
+function insecureKeyGeneration(): Uint8Array {
+  // BAD: Math.random() is not suitable for cryptographic key generation
+  const keyLength = 16; // 128 bits
+  const key = new Uint8Array(keyLength);
+
+  for (let i = 0; i < keyLength; i++) {
+    key[i] = Math.floor(Math.random() * 256);
+  }
+
+  return key;
 }
 
 // Example usage
-const generatedPassword: string = insecurePassword();
-console.log('Generated Password:', generatedPassword);
+const insecureKey = insecureKeyGeneration();
+console.log('Insecure Key:', insecureKey);
