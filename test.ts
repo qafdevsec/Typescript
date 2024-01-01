@@ -1,13 +1,16 @@
-// This script should be included in the head of your HTML file
+import * as express from 'express';
 
-function preventClickjacking() {
-  if (self === top) {
-    // The current window is the top-level window, not embedded in an iframe
-  } else {
-    // The current window is embedded in an iframe, break out of the frame
-    top.location = self.location;
-  }
-}
+const app = express();
 
-// Call the function to prevent clickjacking when the script is loaded
-preventClickjacking();
+// Middleware to set X-Frame-Options header
+app.use((req, res, next) => {
+  res.header('X-Frame-Options', 'DENY');
+  next();
+});
+
+// Your routes and application logic go here
+
+const port = 3000;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
