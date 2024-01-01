@@ -1,15 +1,15 @@
-function insecureKeyGeneration(): Uint8Array {
-  // BAD: Math.random() is not suitable for cryptographic key generation
-  const keyLength = 16; // 128 bits
-  const key = new Uint8Array(keyLength);
+import * as crypto from 'crypto';
 
-  for (let i = 0; i < keyLength; i++) {
-    key[i] = Math.floor(Math.random() * 256);
-  }
-
-  return key;
+function insecureHashPassword(password: string): string {
+  // WARNING: MD5 is considered insecure for password hashing
+  const hash = crypto.createHash('md5');
+  hash.update(password);
+  return hash.digest('hex');
 }
 
 // Example usage
-const insecureKey = insecureKeyGeneration();
-console.log('Insecure Key:', insecureKey);
+const plaintextPassword = 'mySecurePassword';
+const insecureHashedPassword = insecureHashPassword(plaintextPassword);
+
+console.log('Original Password:', plaintextPassword);
+console.log('Insecure Hashed Password:', insecureHashedPassword);
