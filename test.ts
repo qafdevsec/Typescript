@@ -1,22 +1,27 @@
-import * as https from 'https';
-import * as fs from 'fs';
+import * as tls from 'tls';
 
-const options = {
-  key: fs.readFileSync('insecure-key.pem'),  // WARNING: This key should be kept secret!
-  cert: fs.readFileSync('insecure-cert.pem'), // WARNING: This certificate is self-signed and not trusted!
-  ciphers: 'LOW', // WARNING: Allowing low-strength ciphers is insecure!
-  honorCipherOrder: false, // WARNING: Disabling cipher order may expose the connection to downgrade attacks!
-  secureProtocol: 'TLSv1_method', // WARNING: Using outdated and insecure TLS version!
-  // Other insecure configurations might include weak key exchange algorithms, lack of Perfect Forward Secrecy (PFS), etc.
-};
+function insecureMinMaxTlsVersion() {
+  {
+    const config: tls.ConnectionOptions = {};
+    config.minVersion = 'TLSv1'; // BAD: Choosing the lowest supported version (i.e., SSL3.0 or TLSv1.0)
+  }
+  {
+    const config: tls.ConnectionOptions = {};
+    config.minVersion = 'SSLv3'; // BAD: SSL 3.0 is a non-secure version of the protocol; it's not safe to use it as MinVersion.
+  }
+  {
+    const config: tls.ConnectionOptions = {};
+    config.maxVersion = 'SSLv3'; // BAD: SSL 3.0 is a non-secure version of the protocol; it's not safe to use it as MaxVersion.
+  }
+}
 
-const server = https.createServer(options, (req, res) => {
-  res.writeHead(200);
-  res.end('Insecure TLS Configuration Example\n');
-});
+function insecureCipherSuites() {
+  const config: tls.ConnectionOptions = {
+    ciphers: ['TLS_RSA_WITH_RC4_128_SHA'], // BAD: Non-secure cipher suite TLS_RSA_WITH_RC4_128_SHA
+  };
+  // Do something with the config
+}
 
-const port = 8443;
-
-server.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// Example usage
+insecureMinMaxTlsVersion();
+insecureCipherSuites();
