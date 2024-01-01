@@ -1,50 +1,27 @@
-function comparePasswordsConstantTime(password1: string, password2: string): boolean {
-  if (password1.length !== password2.length) {
-    return false;
+import * as tls from 'tls';
+
+function insecureMinMaxTlsVersion() {
+  {
+    const config: tls.ConnectionOptions = {};
+    config.minVersion = 'TLSv1'; // BAD: Choosing the lowest supported version (i.e., SSL3.0 or TLSv1.0)
   }
-
-  let result = 0;
-
-  for (let i = 0; i < password1.length; i++) {
-    // Use bitwise OR to ensure constant time comparison
-    result |= password1.charCodeAt(i) ^ password2.charCodeAt(i);
+  {
+    const config: tls.ConnectionOptions = {};
+    config.minVersion = 'SSLv3'; // BAD: SSL 3.0 is a non-secure version of the protocol; it's not safe to use it as MinVersion.
   }
-
-  return result === 0;
+  {
+    const config: tls.ConnectionOptions = {};
+    config.maxVersion = 'SSLv3'; // BAD: SSL 3.0 is a non-secure version of the protocol; it's not safe to use it as MaxVersion.
+  }
 }
 
-function insecureComparePasswords(password1: string, password2: string): boolean {
-  // Insecure: Early return may leak information about the first incorrect character
-  if (password1.length !== password2.length) {
-    return false;
-  }
-
-  for (let i = 0; i < password1.length; i++) {
-    if (password1.charAt(i) !== password2.charAt(i)) {
-      return false; // Insecure: Timing discrepancy reveals information about incorrect characters
-    }
-  }
-
-  return true;
+function insecureCipherSuites() {
+  const config: tls.ConnectionOptions = {
+    ciphers: ['TLS_RSA_WITH_RC4_128_SHA'], // BAD: Non-secure cipher suite TLS_RSA_WITH_RC4_128_SHA
+  };
+  // Do something with the config
 }
 
-// Simulating a timing attack
-function simulateTimingAttack() {
-  const secretPassword = 'secret123';
-  const attackerPassword = 'attack123';
-
-  // Constant time comparison
-  const startTimeConstantTime = Date.now();
-  comparePasswordsConstantTime(secretPassword, attackerPassword);
-  const endTimeConstantTime = Date.now();
-  console.log('Constant time comparison took:', endTimeConstantTime - startTimeConstantTime, 'ms');
-
-  // Insecure comparison
-  const startTimeInsecure = Date.now();
-  insecureComparePasswords(secretPassword, attackerPassword);
-  const endTimeInsecure = Date.now();
-  console.log('Insecure comparison took:', endTimeInsecure - startTimeInsecure, 'ms');
-}
-
-// Simulate a timing attack
-simulateTimingAttack();
+// Example usage
+insecureMinMaxTlsVersion();
+insecureCipherSuites();
