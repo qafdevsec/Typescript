@@ -1,9 +1,7 @@
-function readData(buffer: Buffer, length: number): string {
-  // Attempting to read 'length' bytes from the buffer
-  return buffer.toString('utf-8', 0, length);
+// Insecure random number generation
+function generateInsecureRandomNumber(max: number): number {
+  return Math.floor(Math.random() * max); // Not cryptographically secure
 }
 
-let dataBuffer: Buffer = Buffer.from('Hello, World!');
-let result: string = readData(dataBuffer, 15); // Attempting to read 15 bytes
-
-console.log(result);
+// Example usage (vulnerable to prediction):
+const sessionToken = generateInsecureRandomNumber(10000); // Predictable token
