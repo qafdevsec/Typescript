@@ -1,13 +1,6 @@
-function unsafeConcatenateStrings(strings: string[]): string {
-  // Potentially unsafe: Inaccurate buffer size calculation
-  const totalLength = strings.reduce((sum, str) => sum + str.length, 0); // Assumes ASCII characters only
-  const resultBuffer = new Buffer(totalLength); // Allocates buffer based on potentially incorrect length
+// Bad practice: Unclear meaning
+const result = calculateSomething(value * 1.5);  // What does 1.5 represent?
 
-  let offset = 0;
-  for (const str of strings) {
-    resultBuffer.write(str, offset); // Potentially writes beyond buffer boundaries if non-ASCII characters exist
-    offset += str.length;
-  }
-
-  return resultBuffer.toString();
-}
+// Better practice: Use named constants
+const CONVERSION_FACTOR = 1.5;
+const result = calculateSomething(value * CONVERSION_FACTOR);
