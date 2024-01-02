@@ -1,8 +1,28 @@
-function generateInsecureToken(): string {
-  // This is an insecure way to generate tokens, as Math.random is not suitable for security purposes
-  let token = Math.random().toString(36).substr(2, 10);
-  return token;
+function processUserInput(userData) {
+  // Assume userData is an object provided by user input
+  merge({}, userData); // Merge user input into an empty object
 }
 
-let insecureToken = generateInsecureToken();
-console.log("Insecure Token:", insecureToken);
+function merge(target, source) {
+  for (const attr in source) {
+    if (typeof target[attr] === 'object' && typeof source[attr] === 'object') {
+      // Recursive merge for nested objects
+      merge(target[attr], source[attr]);
+    } else {
+      target[attr] = source[attr];
+    }
+  }
+}
+
+// Attacker-controlled data with prototype pollution
+const maliciousInput = {
+  __proto__: {
+    pollute: 'polluted'
+  },
+  key: 'value'
+};
+
+processUserInput(maliciousInput);
+
+// The prototype of the Object has been polluted
+console.log({}.pollute); // Outputs 'polluted'
