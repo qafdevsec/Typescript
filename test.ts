@@ -1,15 +1,13 @@
-function compareStrings(str1: string, str2: string): boolean {
-  if (str1.length !== str2.length) {
+function comparePasswords(userInput: string, storedHashedPassword: string): boolean {
+  if (userInput.length !== storedHashedPassword.length) {
     return false;
   }
 
-  let equal = true;
-
-  for (let i = 0; i < str1.length; i++) {
-    if (str1[i] !== str2[i]) {
-      equal = false;
+  for (let i = 0; i < userInput.length; i++) {
+    if (userInput[i] !== storedHashedPassword[i]) {
+      return false; // Returns early if a mismatch is found
     }
   }
 
-  return equal;
+  return true;
 }
