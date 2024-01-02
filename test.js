@@ -1,11 +1,8 @@
-async function updateUser(userId, requestBody) {
-  const userData = await db.loadUserData(userId);
-  merge(userData, requestBody);
-
-  log("Saving userData " + userData.toString());
-  await db.saveUserData(userId, userData);
-  return userData;
+function generateInsecureToken(): string {
+  // This is an insecure way to generate tokens, as Math.random is not suitable for security purposes
+  let token = Math.random().toString(36).substr(2, 10);
+  return token;
 }
 
-async function getRole(userId) {
-  const userPermissions = await db.loadUserPermissions(userId);
+let insecureToken = generateInsecureToken();
+console.log("Insecure Token:", insecureToken);
