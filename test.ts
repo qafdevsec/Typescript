@@ -1,6 +1,8 @@
-// Bad practice: Unclear meaning
-const result = calculateSomething(value * 1.5);  // What does 1.5 represent?
+function unsafeEval(code: string): any {
+  // Potentially unsafe: Vulnerable to injection attacks if code is not properly sanitized
+  return eval(code);  // Evaluates code dynamically
+}
 
-// Better practice: Use named constants
-const CONVERSION_FACTOR = 1.5;
-const result = calculateSomething(value * CONVERSION_FACTOR);
+// Example usage (vulnerable to injection):
+const userInput = "alert('Malicious code executed!');";
+const result = unsafeEval(userInput); // Executes injected code
