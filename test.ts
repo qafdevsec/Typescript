@@ -1,11 +1,12 @@
-import fs from 'fs';
+// Clear-text HTTP server
+import * as http from 'http';
 
-function saveCredentials(username: string, password: string): void {
-  const credentials = `${username}:${password}`;
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('This is a clear-text HTTP response.\n');
+});
 
-  // Writing credentials to a file (unsafe)
-  fs.writeFileSync('credentials.txt', credentials, 'utf-8');
-}
-
-// Example usage
-saveCredentials('user123', 'secretpassword');
+const PORT = 3000;
+server.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
