@@ -1,13 +1,15 @@
-import fs from 'fs';
+function compareStrings(str1: string, str2: string): boolean {
+  if (str1.length !== str2.length) {
+    return false;
+  }
 
-// Function to save API key to a configuration file (unsafe)
-function saveApiKey(apiKey: string): void {
-  const config = `API_KEY=${apiKey}`;
+  let equal = true;
 
-  // Writing configuration to a file (unsafe)
-  fs.writeFileSync('config.txt', config, 'utf-8');
+  for (let i = 0; i < str1.length; i++) {
+    if (str1[i] !== str2[i]) {
+      equal = false;
+    }
+  }
+
+  return equal;
 }
-
-// Example usage
-const sensitiveApiKey = 'my_sensitive_api_key';
-saveApiKey(sensitiveApiKey);
